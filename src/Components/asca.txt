@@ -1,0 +1,199 @@
+import React, { Component } from 'react'
+import Newsitem from './Newsitem'
+import Spinner from './Spinner'
+import PropTypes from 'prop-types'
+
+export class News extends Component {
+    static defaultProps={
+        country:'in',
+        pagesize:9,
+        category:"general"
+    }
+    static propTypes={
+        country:PropTypes.string,
+        pagesize:PropTypes.number,
+        category:PropTypes.string,
+    }
+
+    constructor() {
+        super()
+        console.log("Constructor from news Component")
+        this.state = {
+            articles: this.articles,
+            loading: false,
+            page: 1,
+
+        }
+    }
+    handleNextClick = async () => {
+        if (this.state.page + 1 > Math.ceil(this.state.totalResults / this.props.pagesize)) {
+        }
+        else{
+            console.log("Next")
+            let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=c77c207c72fe4d8ca3d15e9a00de1b62&page=${this.state.page+1}&pagesize=${this.props.pagesize}`
+            
+            let data = await fetch(url)
+            this.setState({loading:true})
+            let parsedData = await data.json()
+            this.setState({
+                articles: parsedData.articles,
+                page: this.state.page + 1,
+                loading:false
+            })
+            console.log(parsedData)
+
+        }
+
+    }
+    handlePreviousClick = async () => {
+        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=c77c207c72fe4d8ca3d15e9a00de1b62&page=${this.state.page-1}&pagesize=${this.props.pagesize}`
+        
+        let data = await fetch(url)
+        this.setState({
+
+            loading:true
+        })
+        let parsedData = await data.json()
+        this.setState({ articles: parsedData.articles })
+        console.log(parsedData)
+        this.setState({
+            page: this.state.page - 1,
+            loading:false
+        })
+    }
+    articles = [
+        {
+            "source": {
+                "id": "fox-sports",
+                "name": "Fox Sports"
+            },
+            "author": "RJ Young",
+            "title": "Transfer portal winners and losers: Ohio State bulks up, Alabama and Washington thin out",
+            "description": "The college football winter transfer portal window is closed, and it's time to find out which teams used it best to build up and which others have more work to do ahead.",
+            "url": "http://www.foxsports.com/stories/college-football/transfer-portal-winners-and-losers-ohio-state-bulks-up-alabama-and-washington-thin-out",
+            "urlToImage": "https://a57.foxsports.com/statics.foxsports.com/www.foxsports.com/content/uploads/2024/01/1408/814/2024-01-16_Transfer-Portal-Winners-And-Losers_16x9.jpg?ve=1&tl=1",
+            "publishedAt": "2024-01-18T19:25:46Z",
+            "content": "The college football winter transfer portal window is closed, and it's time to find out which teams used it best to build up and which others have more work to do ahead.\r\nIn the last week, there was … [+7446 chars]"
+        },
+        {
+            "source": {
+                "id": "espn",
+                "name": "ESPN"
+            },
+            "author": "David Hale",
+            "title": "Miami TE Cam McCormick granted ninth year of eligibility - ESPN",
+            "description": "Miami tight end Cam McCormick confirmed Thursday that he'd be returning to play for the Hurricanes in 2024 -- his ninth season of college football.",
+            "url": "https://www.espn.com/college-football/story/_/id/39337111/miami-te-cam-mccormick-granted-ninth-year-eligibility",
+            "urlToImage": "https://a.espncdn.com/combiner/i?img=%2Fphoto%2F2023%2F0912%2Fr1223599_1296x729_16%2D9.jpg",
+            "publishedAt": "2024-01-18T18:59:00Z",
+            "content": "Miami tight end Cam McCormick confirmed Thursday that he'd be returning to play for the Hurricanes in 2024 -- his ninth season of college football.\r\nMcCormick, who began his career at Oregon in 2016,… [+2650 chars]"
+        },
+        {
+            "source": {
+                "id": "four-four-two",
+                "name": "FourFourTwo"
+            },
+            "author": "Mark White",
+            "title": "Manchester City to be found NOT guilty of 115 charges against them, according to football finance expert",
+            "description": "Manchester City are almost certain not to be found guilty of the FFP allegations surrounding the club, according to one expert",
+            "url": "https://www.fourfourtwo.com/news/manchester-city-to-be-found-not-guilty-of-115-charges-against-them-according-to-football-finance-expert-stefan-borsen-ffp-psr-mcfc",
+            "urlToImage": "https://cdn.mos.cms.futurecdn.net/qcKh6Q788LTzL9GfPXnGoW-1200-80.jpg",
+            "publishedAt": "2024-01-18T15:48:07Z",
+            "content": "Manchester City will escape punishment from the 115 charges they face from the Premier League over financial irregularity. \r\nFinancial Fair Play regulations and the Premier League's own Profit and Su… [+2643 chars]"
+        },
+        {
+            "source": {
+                "id": "bleacher-report",
+                "name": "Bleacher Report"
+            },
+            "author": "David Kenyon",
+            "title": "Unique Stats from the 2023 College Football Regular Season",
+            "description": "Numbers are an integral part of college football. Whether you're previewing games, ranking teams or picking an award winner, statistics help shape the story.…",
+            "url": "https://bleacherreport.com/articles/10100739-unique-stats-from-the-2023-college-football-regular-season",
+            "urlToImage": "https://media.bleacherreport.com/image/upload/c_fill,g_faces,w_3800,h_2000,q_95/v1702319871/sdx1wjlqkcqz3anqfabp.jpg",
+            "publishedAt": "2023-12-12T12:00:00Z",
+            "content": "Zach Bolinger/Icon Sportswire via Getty Images\r\nSpeaking of Iowa...\r\nWhat makes the Hawkeyes' stellar defensive season even more impressive is how much the team desperately needed it.\r\nAmong the many… [+711 chars]"
+        },
+        {
+            "source": {
+                "id": "talksport",
+                "name": "TalkSport"
+            },
+            "author": "161385360554578",
+            "title": "Rice rescues Arsenal, Arteta evades Raya question, more Premier League build-up",
+            "description": "talkSPORT.com brings you all the latest news, views and gossip from the world of football. Today’s headlines: Mikel Arteta dodges David Raya question after goalkeeper’s errors Declan Ri…",
+            "url": "https://talksport.com/football/1667216/football-news-live-arsenal-mikel-arteta-david-raya-premier-league/",
+            "urlToImage": "https://talksport.com/wp-content/uploads/sites/5/2023/12/jw-TALKSPORT-BLOG-06-12.jpg?strip=all&quality=100&w=1500&h=1000&crop=1",
+            "publishedAt": "2023-12-06T09:06:42Z",
+            "content": "Mikel Arteta didn't provide a straight answer when asked about David Raya's struggles during Arsenal's win at Luton.\r\nArsenal claimed a dramatic last-gasp win at Kenilworth Road with Declan Rice's st… [+1106 chars]"
+        },
+        {
+            "source": {
+                "id": "talksport",
+                "name": "TalkSport"
+            },
+            "author": "Josh Fordham",
+            "title": "Tottenham fans feared relegation without Harry Kane but Ange Postecoglou has got them scoring more...",
+            "description": "Tottenham losing Harry Kane in the summer sent the fans into crisis mode and you can’t blame them. Not only was he their record goalscorer, but also one of the best strikers in world football seaso…",
+            "url": "https://talksport.com/football/1666888/tottenham-goals-harry-kane-ange-postecoglou/",
+            "urlToImage": "https://talksport.com/wp-content/uploads/sites/5/2023/12/Kane_Postecoglou-Comp.png?strip=all&quality=100&w=1500&h=1000&crop=1",
+            "publishedAt": "2023-12-05T17:57:19Z",
+            "content": "Tottenham losing Harry Kane in the summer sent the fans into crisis mode and you cant blame them.\r\nNot only was he their record goalscorer, but also one of the best strikers in world football season … [+2220 chars]"
+        },
+        {
+            "source": {
+                "id": "espn-cric-info",
+                "name": "ESPN Cric Info"
+            },
+            "author": null,
+            "title": "Five famous people (and one cat) you didn't know have ESPNcricinfo profiles | ESPNcricinfo.com",
+            "description": "Why do a footballer, a Nobel laureate and a prime minister (no, not Imran Khan) find themselves in the ESPNcricinfo player database? | ESPNcricinfo.com",
+            "url": "http://www.espncricinfo.com/story/_/id/29102695/five-famous-people-one-cat-know-espncricinfo-profiles",
+            "urlToImage": "https://a.espncdn.com/i/cricket/cricinfo/1221668_1296x1296.gif",
+            "publishedAt": "2020-04-27T07:20:43Z",
+            "content": "Why do a cat, a footballer, a Nobel laureate and a prime minister find themselves in the ESPNcricinfo database? Here are six player profiles you wouldn't have expected we had.\r\nPeter the catThe only … [+5504 chars]"
+        }
+    ]
+
+    useEffect(() => {
+        fetchData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [country, category, pagesize, page]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps    
+    // async componentDidMount() {
+    //     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=c77c207c72fe4d8ca3d15e9a00de1b62&page=1&pagesize=${this.props.pagesize}`
+    //     this.setState({
+
+    //         loading:true
+    //     })
+    //     let data = await fetch(url)
+    //     let parsedData = await data.json()
+    //     this.setState({ articles: parsedData.articles, totalResults: parsedData.totalResults,loading:false })
+    //     console.log(parsedData)
+    // }
+    render() {
+        return (
+            <div className='container my-4'>
+                <h2 className='text-center' style={{margin:50}}>News-Universe Top Headlines</h2>
+                {this.state.loading&&<Spinner/>}
+                <div className="row">
+                    {!this.state.loading && this.state.articles.map((element) => {
+                        return (
+                            <div className="col-md-4" key={element.url}>
+                                <Newsitem title={element.title} description={element.description} imageURL={element.urlToImage} newsURL={element.url} />
+                            </div>
+                        )
+                    })}
+                    <div className="navigators d-flex justify-content-between" >
+                        <button type="button" disabled={this.state.page <= 1} onClick={this.handlePreviousClick} className="btn btn-dark"> &larr; Previous</button>
+                        <button type="button" disabled={this.state.page + 1 > Math.ceil(this.state.totalResults / 18)} onClick={this.handleNextClick} className="btn btn-dark">Next &rarr;</button>
+
+                    </div>
+                </div>
+
+            </div>
+        )
+    }
+}
+
+export default News
